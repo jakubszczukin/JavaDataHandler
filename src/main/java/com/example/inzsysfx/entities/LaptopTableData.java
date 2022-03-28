@@ -24,6 +24,7 @@ public class LaptopTableData {
     private final SimpleStringProperty operatingSystem;
     private final SimpleStringProperty opticalDriveType;
 
+
     public LaptopTableData(String manufacturer, String diagonal, String resolution, String matrixType, String isTouchscreen, String cpuModel, Long cpuCores, Long cpuClockSpeed, String ram, String driveCapacity, String driveType, String gpuModel, String gpuMemory, String operatingSystem, String opticalDriveType) {
         this.manufacturer = new SimpleStringProperty(manufacturer);
         this.diagonal = new SimpleStringProperty(diagonal);
@@ -40,6 +41,24 @@ public class LaptopTableData {
         this.gpuMemory = new SimpleStringProperty(gpuMemory);
         this.operatingSystem = new SimpleStringProperty(operatingSystem);
         this.opticalDriveType = new SimpleStringProperty(opticalDriveType);
+    }
+
+    public LaptopTableData(){
+        this.manufacturer = new SimpleStringProperty();
+        this.diagonal = new SimpleStringProperty();
+        this.resolution = new SimpleStringProperty();
+        this.matrixType = new SimpleStringProperty();
+        this.isTouchscreen = new SimpleStringProperty();
+        this.cpuModel = new SimpleStringProperty();
+        this.cpuCores = new SimpleLongProperty();
+        this.cpuClockSpeed = new SimpleLongProperty();
+        this.ram = new SimpleStringProperty();
+        this.driveCapacity = new SimpleStringProperty();
+        this.driveType = new SimpleStringProperty();
+        this.gpuModel = new SimpleStringProperty();
+        this.gpuMemory = new SimpleStringProperty();
+        this.operatingSystem = new SimpleStringProperty();
+        this.opticalDriveType = new SimpleStringProperty();
     }
 
     public String getLaptopDataAsString(){

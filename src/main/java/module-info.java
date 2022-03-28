@@ -5,6 +5,9 @@ module com.example.inzsysfx {
     requires org.kordamp.bootstrapfx.core;
     requires java.xml;
     requires dom4j;
+    requires java.sql;
+    requires java.sql.rowset;
+    requires mysql.connector.java;
 
     opens com.example.inzsysfx to javafx.fxml;
     exports com.example.inzsysfx;

@@ -1,5 +1,6 @@
 package com.example.inzsysfx.controllers;
 
+import com.example.inzsysfx.dao.LaptopDAO;
 import com.example.inzsysfx.entities.LaptopTableData;
 import com.example.inzsysfx.utils.FileUtils;
 import javafx.collections.FXCollections;
@@ -16,6 +17,7 @@ import javafx.util.converter.LongStringConverter;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LaptopTableController implements Initializable {
@@ -56,8 +58,7 @@ public class LaptopTableController implements Initializable {
 
     private ObservableList<LaptopTableData> laptopDataList = FXCollections.observableArrayList();
 
-    public LaptopTableController() {
-    }
+    public LaptopTableController() {}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -157,6 +158,12 @@ public class LaptopTableController implements Initializable {
            laptopTable.refresh();
         });
 
+    }
+
+    public void importFromDatabase() throws SQLException, ClassNotFoundException {
+        ObservableList<LaptopTableData> lapList = FXCollections.observableArrayList();
+        lapList = LaptopDAO.returnAllLaptops();
+        laptopTable.setItems(lapList);
     }
 
     public void exportToXmlFile(){

@@ -44,8 +44,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" fx:controller="com.example.inzsysfx.controllers.LaptopTableController" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.inzsysfx.controllers.LaptopTableController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -95,35 +96,38 @@
         </Label>
             <StackPane layoutX="25.0" layoutY="27.0" prefHeight="711.0" prefWidth="976.0">
                <children>
-                  <TableView prefHeight="711.0" prefWidth="940.0" fx:id="laptopTable">
+                  <TableView fx:id="laptopTable" prefHeight="711.0" prefWidth="940.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Manufacturer" fx:id="manufacturerColumn"/>
-                      <TableColumn prefWidth="75.0" text="Diagonal" fx:id="diagonalColumn"/>
-                      <TableColumn prefWidth="75.0" text="Resolution" fx:id="resolutionColumn"/>
-                      <TableColumn prefWidth="75.0" text="Matrix Type" fx:id="matrixTypeColumn"/>
-                      <TableColumn prefWidth="75.0" text="Touchscreen" fx:id="isTouchscreenColumn"/>
-                      <TableColumn prefWidth="75.0" text="CPU Model" fx:id="cpuModelColumn"/>
-                      <TableColumn prefWidth="75.0" text="CPU Cores" fx:id="cpuCoresColumn"/>
-                      <TableColumn prefWidth="75.0" text="CPU Clock Speed" fx:id="cpuClockSpeedColumn"/>
-                      <TableColumn prefWidth="75.0" text="RAM" fx:id="ramColumn"/>
-                      <TableColumn prefWidth="75.0" text="Drive Capacity" fx:id="driveCapacityColumn"/>
-                      <TableColumn prefWidth="75.0" text="Drive Type" fx:id="driveTypeColumn"/>
-                      <TableColumn prefWidth="75.0" text="GPU Model" fx:id="gpuModelColumn"/>
-                      <TableColumn prefWidth="75.0" text="GPU Memory" fx:id="gpuMemoryColumn"/>
-                      <TableColumn prefWidth="75.0" text="Operating System" fx:id="operatingSystemColumn"/>
-                      <TableColumn prefWidth="75.0" text="Optical Drive Type" fx:id="opticalDriveTypeColumn"/>
+                      <TableColumn fx:id="manufacturerColumn" prefWidth="75.0" text="Manufacturer" />
+                      <TableColumn fx:id="diagonalColumn" prefWidth="75.0" text="Diagonal" />
+                      <TableColumn fx:id="resolutionColumn" prefWidth="75.0" text="Resolution" />
+                      <TableColumn fx:id="matrixTypeColumn" prefWidth="75.0" text="Matrix Type" />
+                      <TableColumn fx:id="isTouchscreenColumn" prefWidth="75.0" text="Touchscreen" />
+                      <TableColumn fx:id="cpuModelColumn" prefWidth="75.0" text="CPU Model" />
+                      <TableColumn fx:id="cpuCoresColumn" prefWidth="75.0" text="CPU Cores" />
+                      <TableColumn fx:id="cpuClockSpeedColumn" prefWidth="75.0" text="CPU Clock Speed" />
+                      <TableColumn fx:id="ramColumn" prefWidth="75.0" text="RAM" />
+                      <TableColumn fx:id="driveCapacityColumn" prefWidth="75.0" text="Drive Capacity" />
+                      <TableColumn fx:id="driveTypeColumn" prefWidth="75.0" text="Drive Type" />
+                      <TableColumn fx:id="gpuModelColumn" prefWidth="75.0" text="GPU Model" />
+                      <TableColumn fx:id="gpuMemoryColumn" prefWidth="75.0" text="GPU Memory" />
+                      <TableColumn fx:id="operatingSystemColumn" prefWidth="75.0" text="Operating System" />
+                      <TableColumn fx:id="opticalDriveTypeColumn" prefWidth="75.0" text="Optical Drive Type" />
                     </columns>
                   </TableView>
                </children>
             </StackPane>
-            <AnchorPane layoutX="1001.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane layoutX="1001.0" layoutY="27.0" prefHeight="258.0" prefWidth="200.0">
                <children>
-                  <Button layoutX="39.0" layoutY="25.0" mnemonicParsing="false" text="Import from .txt" onAction="#importFromTxtFile"/>
-                  <Button layoutX="39.0" layoutY="61.0" mnemonicParsing="false" text="Export to .txt" onAction="#exportToTxtFile"/>
-                  <Button layoutX="36.0" layoutY="100.0" mnemonicParsing="false" text="Import from .xml" onAction="#importFromXmlFile"/>
-                  <Button layoutX="37.0" layoutY="136.0" mnemonicParsing="false" text="Export to .xml" onAction="#exportToXmlFile"/>
+                  <Button layoutX="38.0" layoutY="27.0" mnemonicParsing="false" onAction="#importFromTxtFile" text="Import from .txt" />
+                  <Button layoutX="36.0" layoutY="62.0" mnemonicParsing="false" onAction="#exportToTxtFile" text="Export to .txt" />
+                  <Button layoutX="36.0" layoutY="100.0" mnemonicParsing="false" onAction="#importFromXmlFile" text="Import from .xml" />
+                  <Button layoutX="37.0" layoutY="136.0" mnemonicParsing="false" onAction="#exportToXmlFile" text="Export to .xml" />
+                  <Button layoutX="36.0" layoutY="172.0" mnemonicParsing="false" onAction="#importFromDatabase" text="Import from database" />
+                  <Button layoutX="36.0" layoutY="211.0" mnemonicParsing="false" text="Export to database" />
                </children>
             </AnchorPane>
+            <Text layoutX="1044.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wczytałem dane z X" wrappingWidth="106.658203125" />
       </children>
     </AnchorPane>
   </children>
