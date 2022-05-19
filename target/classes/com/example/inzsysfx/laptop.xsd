@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="127.0.0.1:8888/laptops" targetNamespace="127.0.0.1:8888/laptops">
+
+    <xs:element name="getLaptopTableRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="laptopTable" type="tns:laptopTableData" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getLaptopTableResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="laptopTable" type="tns:laptopTableData" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="laptopTableData">
+        <xs:sequence>
+            <xs:element name="id" type="xs:integer" />
+            <xs:element name="manufacturer" type="xs:string"/>
+            <xs:element name="diagonal" type="xs:string" />
+            <xs:element name="resolution" type="xs:string" />
+            <xs:element name="matrixType" type="xs:string" />
+            <xs:element name="isTouchScreen" type="xs:string" />
+            <xs:element name="cpuModel" type="xs:string" />
+            <xs:element name="cpuCores" type="xs:long" />
+            <xs:element name="cpuClockSpeed" type="xs:long" />
+            <xs:element name="ram" type="xs:string" />
+            <xs:element name="driveCapacity" type="xs:string" />
+            <xs:element name="driveType" type="xs:string" />
+            <xs:element name="gpuModel" type="xs:string" />
+            <xs:element name="gpuMemory" type="xs:string" />
+            <xs:element name="operatingSystem" type="xs:string" />
+            <xs:element name="opticalDriveType" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
