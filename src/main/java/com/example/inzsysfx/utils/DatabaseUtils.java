@@ -1,7 +1,10 @@
 package com.example.inzsysfx.utils;
 
+import com.example.inzsysfx.entities.LaptopTableData;
+import javafx.collections.ObservableList;
+
 import java.sql.*;
-import com.sun.rowset.CachedRowSetImpl;
+import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
@@ -49,7 +52,6 @@ public class DatabaseUtils {
         try{
             // Connect to DB
             dbConnectXampp();
-            System.out.println("Select statement: " + query + "\n");
 
             // Create statement
             stmt = conn.createStatement();
@@ -100,5 +102,37 @@ public class DatabaseUtils {
             //Close connection
             dbDisconnect();
         }
+    }
+
+    public static void dbUpdateLaptopDatabase(ObservableList<LaptopTableData> lapData) throws SQLException {
+        try{
+            dbConnectXampp();
+            String sql = "INSERT INTO laptops(manufacturer, diagonal, resolution, matrixType, isTouchscreen, cpuModel, cpuCores, cpuClockSpeed, ram, driveCapacity, driveType, gpuModel, gpuMemory, operatingSystem, opticalDriveType) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            for(LaptopTableData laptop : lapData){
+                ps.clearParameters();
+                ps.setString(1, laptop.getManufacturer());
+                ps.setString(2, laptop.getDiagonal());
+                ps.setString(3, laptop.getResolution());
+                ps.setString(4, laptop.getMatrixType());
+                ps.setString(5, laptop.getIsTouchscreen());
+                ps.setString(6, laptop.getCpuModel());
+                ps.setLong(7, laptop.getCpuCores());
+                ps.setLong(8, laptop.getCpuClockSpeed());
+                ps.setString(9, laptop.getRam());
+                ps.setString(10, laptop.getDriveCapacity());
+                ps.setString(11, laptop.getDriveType());
+                ps.setString(12, laptop.getGpuModel());
+                ps.setString(13, laptop.getGpuMemory());
+                ps.setString(14, laptop.getOperatingSystem());
+                ps.setString(15, laptop.getOpticalDriveType());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException e) {
+            System.out.println("Problem occurred at executeUpdate operation : " + e);
+            throw e;
+        }
+        dbDisconnect();
     }
 }

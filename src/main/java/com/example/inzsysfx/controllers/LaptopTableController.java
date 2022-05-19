@@ -10,21 +10,27 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import javafx.util.converter.LongStringConverter;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LaptopTableController implements Initializable {
 
-    @FXML private Button importFromTxtButton;
-
     @FXML private TableView<LaptopTableData> laptopTable;
+
+    @FXML private TableColumn<LaptopTableData, Integer> idColumn;
 
     @FXML private TableColumn<LaptopTableData, String> manufacturerColumn;
 
@@ -56,13 +62,22 @@ public class LaptopTableController implements Initializable {
 
     @FXML private TableColumn<LaptopTableData, String> opticalDriveTypeColumn;
 
+    @FXML private Text sourceText;
+
     private ObservableList<LaptopTableData> laptopDataList = FXCollections.observableArrayList();
 
     public LaptopTableController() {}
 
+    enum Status{
+        UPDATED,
+        NOT_UPDATED,
+        NOT_EXISTS
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         manufacturerColumn.setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         diagonalColumn.setCellValueFactory(new PropertyValueFactory<>("diagonal"));
         resolutionColumn.setCellValueFactory(new PropertyValueFactory<>("resolution"));
@@ -81,6 +96,25 @@ public class LaptopTableController implements Initializable {
 
         laptopTable.setEditable(true);
         laptopTable.getSelectionModel().cellSelectionEnabledProperty().set(true);
+        idColumn.setEditable(false);
+
+        // Set a custom cel lfactory for column to change row background
+        laptopTable.setRowFactory(tr -> new TableRow<>() {
+            @Override
+            public void updateItem(LaptopTableData item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || item.getDuplicated() == null)
+                    setStyle("");
+                else if (item.getDuplicated()) {
+                    setStyle("-fx-background-color: red");
+                    System.out.println(item.getLaptopDataAsString() + item.getDuplicated().toString());
+                }
+                else if(!item.getDuplicated()) {
+                    System.out.println(item.getLaptopDataAsString() + item.getDuplicated().toString());
+                    setStyle("-fx-background-color: gray");
+                }
+            }
+        });
 
         /*
         // Custom TableCell class to change style whenever cell is updated
@@ -109,6 +143,7 @@ public class LaptopTableController implements Initializable {
         });
         */
 
+        idColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         manufacturerColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         diagonalColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         resolutionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -160,10 +195,62 @@ public class LaptopTableController implements Initializable {
 
     }
 
+    public Status checkIfUpdated(LaptopTableData laptop) throws SQLException, ClassNotFoundException {
+        LaptopTableData compLaptop = LaptopDAO.searchLaptop(Integer.toString(laptop.getId()));
+        if(compLaptop == null)
+            return Status.NOT_EXISTS;
+        if(laptop.getLaptopDataAsString().equals(compLaptop.getLaptopDataAsString()))
+            return Status.NOT_UPDATED;
+        else
+            return Status.UPDATED;
+    }
+
+    public int findDuplicates(ObservableList<LaptopTableData> lapList){
+        ObservableList<LaptopTableData> lapTableData = laptopTable.getItems();
+        //ArrayList<LaptopTableData> foundDuplicates = new ArrayList<>();
+        int dupAmount = 0;
+        for(LaptopTableData laptop : lapList){
+            for(LaptopTableData tableLaptop : lapTableData){
+                if(laptop.getLaptopDataAsString().equals(tableLaptop.getLaptopDataAsString())){
+                    laptop.setDuplicated(true);
+                    dupAmount++;
+                    System.out.println(laptop.getLaptopDataAsString() + laptop.getDuplicated().toString());
+                }
+                else if(!laptop.getLaptopDataAsString().equals(tableLaptop.getLaptopDataAsString()) && laptop.getDuplicated() == null){
+                    laptop.setDuplicated(false);
+                }
+            }
+        }
+        return dupAmount;
+    }
+
     public void importFromDatabase() throws SQLException, ClassNotFoundException {
-        ObservableList<LaptopTableData> lapList = FXCollections.observableArrayList();
+        ObservableList<LaptopTableData> lapList;
         lapList = LaptopDAO.returnAllLaptops();
+       // ArrayList<LaptopTableData> dupLapList = findDuplicates(lapList);
+        int dupAmount = findDuplicates(lapList);
+        sourceText.setText("Data imported from database. Found " + dupAmount + " duplicated records");
         laptopTable.setItems(lapList);
+    }
+
+    public void exportToDatabase() throws SQLException, ClassNotFoundException {
+        ObservableList<LaptopTableData> tableList = laptopTable.getItems();
+        ArrayList<LaptopTableData> listToSave = new ArrayList<>();
+        int updRecAmount = 0;
+        for(LaptopTableData laptop : tableList){
+            Status laptopStatus = checkIfUpdated(laptop);
+            if(laptopStatus == Status.NOT_EXISTS){
+                System.out.println(laptop.getId() + ";" + laptop.getLaptopDataAsString());
+                listToSave.add(laptop);
+            }
+            else if(laptopStatus == Status.UPDATED){
+                LaptopDAO.updateLaptop(laptop);
+                updRecAmount++;
+            }
+        }
+        System.out.println("TableListSize = " + tableList.size() + ", listToSaveSize = " + listToSave.size());
+        LaptopDAO.insertLaptopList(listToSave);
+        sourceText.setText("Data exported to database. Updated " + updRecAmount + " records, added " + listToSave.size() + " records.");
     }
 
     public void exportToXmlFile(){
@@ -174,6 +261,7 @@ public class LaptopTableController implements Initializable {
 
         if(file != null){
             FileUtils.saveXmlFile(file, laptopDataList);
+            sourceText.setText("Data exported to xml file.");
         }
     }
 
@@ -184,7 +272,10 @@ public class LaptopTableController implements Initializable {
         File file = fc.showOpenDialog((new Stage()));
         if(file != null){
             laptopDataList = FileUtils.readXmlFile(file);
+            //ArrayList<LaptopTableData> dupLapList = findDuplicates(laptopDataList);
+            int dupAmount = findDuplicates(laptopDataList);
             laptopTable.setItems(laptopDataList);
+            sourceText.setText("Data imported from xml file. Found " + dupAmount + " duplicated records");
         }
     }
 
@@ -195,7 +286,10 @@ public class LaptopTableController implements Initializable {
         File file = fc.showOpenDialog(new Stage());
         if(file != null){
             laptopDataList = FileUtils.readTxtFile(file);
+            //ArrayList<LaptopTableData> dupLapList = findDuplicates(laptopDataList);
+            int dupAmount = findDuplicates(laptopDataList);
             laptopTable.setItems(laptopDataList);
+            sourceText.setText("Data imported from txt file. Found " + dupAmount + " duplicated records");
         }
     }
 
@@ -207,6 +301,7 @@ public class LaptopTableController implements Initializable {
 
         if(file != null){
             FileUtils.saveTxtFile(file, laptopDataList);
+            sourceText.setText("Data exported to txt file.");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.inzsysfx.entities;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -8,6 +9,7 @@ public class LaptopTableData {
     /**
      * String/Long can be used instead of Simple variant but the latter ones are "wrappers" which can be used to add listeners or bind to other properties
      */
+    private final SimpleIntegerProperty id;
     private final SimpleStringProperty manufacturer;
     private final SimpleStringProperty diagonal;
     private final SimpleStringProperty resolution;
@@ -23,9 +25,10 @@ public class LaptopTableData {
     private final SimpleStringProperty gpuMemory;
     private final SimpleStringProperty operatingSystem;
     private final SimpleStringProperty opticalDriveType;
+    private Boolean isDuplicated = null;
 
 
-    public LaptopTableData(String manufacturer, String diagonal, String resolution, String matrixType, String isTouchscreen, String cpuModel, Long cpuCores, Long cpuClockSpeed, String ram, String driveCapacity, String driveType, String gpuModel, String gpuMemory, String operatingSystem, String opticalDriveType) {
+    public LaptopTableData(int id, String manufacturer, String diagonal, String resolution, String matrixType, String isTouchscreen, String cpuModel, Long cpuCores, Long cpuClockSpeed, String ram, String driveCapacity, String driveType, String gpuModel, String gpuMemory, String operatingSystem, String opticalDriveType) {
         this.manufacturer = new SimpleStringProperty(manufacturer);
         this.diagonal = new SimpleStringProperty(diagonal);
         this.resolution = new SimpleStringProperty(resolution);
@@ -41,9 +44,11 @@ public class LaptopTableData {
         this.gpuMemory = new SimpleStringProperty(gpuMemory);
         this.operatingSystem = new SimpleStringProperty(operatingSystem);
         this.opticalDriveType = new SimpleStringProperty(opticalDriveType);
+        this.id = new SimpleIntegerProperty(id);
     }
 
     public LaptopTableData(){
+        this.id = new SimpleIntegerProperty();
         this.manufacturer = new SimpleStringProperty();
         this.diagonal = new SimpleStringProperty();
         this.resolution = new SimpleStringProperty();
@@ -77,6 +82,64 @@ public class LaptopTableData {
                 + correctUnknownInfo(gpuMemory.get()) + ";"
                 + correctUnknownInfo(operatingSystem.get()) + ";"
                 + correctUnknownInfo(opticalDriveType.get()) + ";";
+    }
+
+    @Override
+    public String toString(){
+        return (
+                manufacturer.get() + diagonal.get() + resolution.get() +
+                matrixType.get() + isTouchscreen.get() + cpuModel.get() +
+                cpuCores.get() + cpuClockSpeed.get() + ram.get() +
+                driveCapacity.get() + driveType.get() + gpuModel.get() +
+                gpuMemory.get() + operatingSystem.get() + opticalDriveType.get()
+                );
+    }
+
+    /*
+    @Override
+    public boolean equals(Object o){
+        if(o == this)
+            return true;
+        if(!(o instanceof LaptopTableData))
+            return false;
+        LaptopTableData l = (LaptopTableData) o;
+
+        return manufacturer.equals(l.manufacturer) &&
+                diagonal.equals(l.diagonal) &&
+                resolution.equals(l.resolution) &&
+                matrixType.equals(l.matrixType) &&
+                isTouchscreen.equals(l.isTouchscreen) &&
+                cpuModel.equals(l.cpuModel) &&
+                cpuCores.equals(l.cpuCores) &&
+                cpuClockSpeed.equals(l.cpuClockSpeed) &&
+                ram.equals(l.ram) &&
+                driveCapacity.equals(l.driveCapacity) &&
+                driveType.equals(l.driveType) &&
+                gpuModel.equals(l.gpuModel) &&
+                gpuMemory.equals(l.gpuMemory) &&
+                operatingSystem.equals(l.operatingSystem) &&
+                opticalDriveType.equals(l.opticalDriveType);
+    }
+*/
+
+    public int getId() {
+        return id.get();
+    }
+
+    public SimpleIntegerProperty idProperty() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
+    }
+
+    public Boolean getDuplicated() {
+        return isDuplicated;
+    }
+
+    public void setDuplicated(Boolean isDuplicated){
+        this.isDuplicated = isDuplicated;
     }
 
     private String correctUnknownInfo(String str){

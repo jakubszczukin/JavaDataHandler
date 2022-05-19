@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MainScene.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
-        stage.setTitle("Jakub Szczukin - Integracja Systemów!");
+        stage.setTitle("Jakub Szczukin - Aplikacja serwerowa - Integracja Systemów!");
         stage.setScene(scene);
         stage.show();
     }

@@ -98,6 +98,7 @@
                <children>
                   <TableView fx:id="laptopTable" prefHeight="711.0" prefWidth="940.0">
                     <columns>
+                      <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
                       <TableColumn fx:id="manufacturerColumn" prefWidth="75.0" text="Manufacturer" />
                       <TableColumn fx:id="diagonalColumn" prefWidth="75.0" text="Diagonal" />
                       <TableColumn fx:id="resolutionColumn" prefWidth="75.0" text="Resolution" />
@@ -124,10 +125,10 @@
                   <Button layoutX="36.0" layoutY="100.0" mnemonicParsing="false" onAction="#importFromXmlFile" text="Import from .xml" />
                   <Button layoutX="37.0" layoutY="136.0" mnemonicParsing="false" onAction="#exportToXmlFile" text="Export to .xml" />
                   <Button layoutX="36.0" layoutY="172.0" mnemonicParsing="false" onAction="#importFromDatabase" text="Import from database" />
-                  <Button layoutX="36.0" layoutY="211.0" mnemonicParsing="false" text="Export to database" />
+                  <Button layoutX="36.0" layoutY="211.0" mnemonicParsing="false" onAction="#exportToDatabase" text="Export to database" />
                </children>
             </AnchorPane>
-            <Text layoutX="1044.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wczytałem dane z X" wrappingWidth="106.658203125" />
+            <Text layoutX="1044.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="106.658203125" fx:id="sourceText"/>
       </children>
     </AnchorPane>
   </children>

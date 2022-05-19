@@ -32,7 +32,8 @@ public class FileUtils {
             root.addAttribute("moddate", ldt.truncatedTo(ChronoUnit.SECONDS).format(dtf));
 
             for(LaptopTableData laptop : list){
-                Element laptopNode = root.addElement("laptop").addAttribute("id", Integer.toString(lapCount));
+                //Element laptopNode = root.addElement("laptop").addAttribute("id", Integer.toString(lapCount));
+                Element laptopNode = root.addElement("laptop").addAttribute("id", Integer.toString(laptop.getId()));
                 laptopNode.addElement("manufacturer").addText(correctUnknownInfo(laptop.getManufacturer()));
 
                 Element screenNode = laptopNode.addElement("screen").addAttribute("touch", correctUnknownInfo(laptop.getIsTouchscreen()));
@@ -81,6 +82,7 @@ public class FileUtils {
             ObservableList<LaptopTableData> laptopList = FXCollections.observableArrayList();
 
             for (Node node : nodeList) {
+                int id = Integer.parseInt(node.valueOf("@id"));
                 String manufacturer = checkIfStringEmpty(node.selectSingleNode("manufacturer").getText());
                 Node screenNode = node.selectSingleNode("screen");
                 String isTouchscreen = screenNode.valueOf("@touch");
@@ -100,7 +102,7 @@ public class FileUtils {
                 String gpuMemory = checkIfStringEmpty(gpuNode.selectSingleNode("memory").getText());
                 String operatingSystem = checkIfStringEmpty(node.selectSingleNode("os").getText());
                 String opticalDriveType = checkIfStringEmpty(node.selectSingleNode("disc_reader").getText());
-                laptopList.add(new LaptopTableData(manufacturer, diagonal, resolution, matrixType, isTouchscreen, cpuModel, cpuCores, cpuClockSpeed, ram, driveCapacity, driveType, gpuModel, gpuMemory, operatingSystem, opticalDriveType));
+                laptopList.add(new LaptopTableData(id, manufacturer, diagonal, resolution, matrixType, isTouchscreen, cpuModel, cpuCores, cpuClockSpeed, ram, driveCapacity, driveType, gpuModel, gpuMemory, operatingSystem, opticalDriveType));
             }
             return laptopList;
         } catch (DocumentException e) {
@@ -129,9 +131,10 @@ public class FileUtils {
         ObservableList<LaptopTableData> laptopList = FXCollections.observableArrayList();
         try{
             Scanner scanner = new Scanner(file);
+            int id = 1;
             while(scanner.hasNextLine()){
                 String singleLine = scanner.nextLine();
-                laptopList.add(parseTxtLine(singleLine));
+                laptopList.add(parseTxtLine(singleLine, id++));
             }
         }catch(FileNotFoundException e){
             e.printStackTrace();
@@ -139,11 +142,12 @@ public class FileUtils {
         return laptopList;
     }
 
-    public static LaptopTableData parseTxtLine(String singleLine){
+    public static LaptopTableData parseTxtLine(String singleLine, int id){
         Scanner scanner = new Scanner(singleLine);
         scanner.useDelimiter(";");
         if(scanner.hasNext()){
             return new LaptopTableData(
+                    id,
                     checkIfStringEmpty(scanner.next()),
                     checkIfStringEmpty(scanner.next()),
                     checkIfStringEmpty(scanner.next()),
